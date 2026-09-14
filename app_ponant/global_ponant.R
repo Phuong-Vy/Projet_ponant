@@ -11,6 +11,9 @@ library(ggiraph) # Dataviz interactive
 library(ggtext) # Complément ggplot2
 library(tidyverse)
 
+
+git config --global user.email "pvnguyen2607@gmail.com"
+
 # IMPORTATION---------------------
 
 ## Importation fichier csv----------------
