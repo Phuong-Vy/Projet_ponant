@@ -10,31 +10,40 @@
 library(shiny)
 
 # Define UI for application that draws a histogram
-fluidPage(
-  
-    # Application title
-    titlePanel("Evolution des logements sur les île du Ponant"),
+navbarPage("Evolution des logements sur les île du Ponant",
+    
+    #theme=shinytheme("journal"),
+
     #logo ubs
     img(src="logo_ubs.png", width="100"),
 
-    
+    tabPanel("Page Graphique",
 
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            selectInput("choix_ile",
-                        "Choix des iles du Ponant:",
-                        choices = df_final$Ile),
-            radioButtons("choix_indicateur",
-                         "Choix de l'indicateur",
-                         choices = c("Nb d'habitants",
-                                         "Taux de résidendes secondaires",
-                                         "Prix médian du bâti au m2"))
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("plot_ponant")
-        )
-    )
+      # Sidebar with a slider input for number of bins
+      sidebarLayout(
+          sidebarPanel(
+              selectInput("choix_ile",
+                          "Choix des iles du Ponant:",
+                          choices = df_final$Ile,
+                          multiple=TRUE),
+              radioButtons("choix_indicateur",
+                           "Choix de l'indicateur",
+                           choices = c("Nb d'habitants ",
+                                       "Taux de résidendes secondaires ",
+                                       "Prix médian du bâti au m2 "))
+          ),
+  
+          # Show a plot of the generated distribution
+          mainPanel(
+              plotOutput("plot_ponant"),
+              plotOutput("bar_ponant")
+          )
+        
+    ) 
+  ),
+    tabPanel("A propos",
+             # Texte statique en HTML
+             br(),
+             "Ceci est une mini-application ", strong("Shiny"),
+             " basée sur les données", em("Allociné"))
 )
