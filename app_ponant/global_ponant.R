@@ -33,4 +33,7 @@ glimpse(df_nettoyer)
 df_final<-df_nettoyer %>% 
   pivot_longer(cols=! "Ile",
                names_to="Tout",
-               values_to="Nombre")
+               values_to="Nombre") %>% 
+  separate(Tout, into = c("Tout", "Date"), sep = "\\(") %>% 
+  mutate(Date = str_remove(Date, "\\)")) %>% 
+  pivot_wider(names_from = Tout, values_from =Nombre)
