@@ -11,23 +11,30 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 fluidPage(
-
+  
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("Evolution des logements sur les île du Ponant"),
+    #logo ubs
+    img(src="logo_ubs.png", width="100"),
+
+    
 
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            selectInput("choix_ile",
+                        "Choix des iles du Ponant:",
+                        choices = df_final$Ile),
+            radioButtons("choix_indicateur",
+                         "Choix de l'indicateur",
+                         choices = c("Nb d'habitants",
+                                         "Taux de résidendes secondaires",
+                                         "Prix médian du bâti au m2"))
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            plotOutput("plot_ponant")
         )
     )
 )
