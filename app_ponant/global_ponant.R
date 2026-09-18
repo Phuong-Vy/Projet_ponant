@@ -23,7 +23,8 @@ glimpse(df_ponant)
 df_nettoyer <- df_ponant %>% 
   select(-c("Nom commune")) %>% 
   filter(Ile!="Locmaria" & Ile!="Le Palais" & Ile!="Sauzon"& Ile!="Bangor") %>%
-  mutate(`Prix médian du bâti au m2 (2023)` = as.numeric(`Prix médian du bâti au m2 (2023)`))
+  mutate(`Prix médian du bâti au m2 (2023)` = as.numeric(`Prix médian du bâti au m2 (2023)`)) %>% 
+  select(-starts_with("Prix médian du bâti au m2"))
 
 
 
@@ -36,3 +37,5 @@ df_final<-df_nettoyer %>%
   separate(Tout, into = c("Tout", "Date"), sep = "\\(") %>% 
   mutate(Date = str_remove(Date, "\\)")) %>% 
   pivot_wider(names_from = Tout, values_from =Nombre)
+
+
