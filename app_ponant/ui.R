@@ -49,6 +49,10 @@ navbarPage("Evolution des logements sur les île du Ponant",
     
     # Deuxième onglet
     tabPanel("A propos",
+             
+             #logo ubs
+             img(src="ile_ponant.jpg", width="200"),
+             
              # Texte statique en HTML
              br(),
              "Ceci est une mini-application ", strong("Shiny"),
