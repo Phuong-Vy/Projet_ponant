@@ -21,9 +21,9 @@ df_ponant<- read_excel("app_ponant/data/Data_Ponant.xlsx")
 glimpse(df_ponant)
 
 df_nettoyer <- df_ponant %>% 
-  select(-c("Nom commune")) %>% 
-  filter(Ile!="Locmaria" & Ile!="Le Palais" & Ile!="Sauzon"& Ile!="Bangor") %>%
-  mutate(`Prix médian du bâti au m2 (2023)` = as.numeric(`Prix médian du bâti au m2 (2023)`))
+  select(-c("Nom commune")) %>%  # suppression de la colonne Nom commune
+  filter(Ile!="Locmaria" & Ile!="Le Palais" & Ile!="Sauzon"& Ile!="Bangor") %>%  # retrait des îles qui font partie de l'archipel Belle-île en Mer
+  mutate(`Prix médian du bâti au m2 (2023)` = as.numeric(`Prix médian du bâti au m2 (2023)`)) # mettre les valeurs en numeric
 
 
 
@@ -31,10 +31,10 @@ df_nettoyer <- df_ponant %>%
 glimpse(df_nettoyer)
 
 df_final<-df_nettoyer %>% 
-  pivot_longer(cols=! "Ile",
+  pivot_longer(cols=! "Ile", 
                names_to="Tout",
-               values_to="Nombre") %>% 
-  separate(Tout, into = c("Tout", "Date"), sep = "\\(") %>% 
+               values_to="Nombre") %>% # Rautation de la table (colonne en variable et variable en colonne)
+  separate(Tout, into = c("Tout", "Date"), sep = "\\(") %>%  #  Création d'une colonne Date
   mutate(Date = as.numeric(str_remove(Date, "\\)")))
   
 

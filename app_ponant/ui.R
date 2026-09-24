@@ -16,16 +16,21 @@ navbarPage("Evolution des logements sur les île du Ponant",
 
     #logo ubs
     img(src="logo_ubs.png", width="100"),
-
+    
+    # Premier onglet
     tabPanel("Page Graphique",
 
       # Sidebar with a slider input for number of bins
       sidebarLayout(
           sidebarPanel(
+            
+              # Liste déroulante des îles
               selectInput("choix_ile",
                           "Choix des iles du Ponant:",
                           choices = df_final$Ile,
                           multiple=TRUE),
+              
+              # Boutons pour l'analyse des indicateurs
               radioButtons("choix_indicateur",
                            "Choix de l'indicateur",
                            choices = c("Nb d'habitants ",
@@ -41,6 +46,8 @@ navbarPage("Evolution des logements sur les île du Ponant",
         
     ) 
   ),
+    
+    # Deuxième onglet
     tabPanel("A propos",
              # Texte statique en HTML
              br(),
