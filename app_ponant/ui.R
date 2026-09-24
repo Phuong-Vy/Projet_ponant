@@ -53,8 +53,11 @@ navbarPage("Evolution des logements sur les île du Ponant",
              #logo ubs
              img(src="ile_ponant.jpg", width="200"),
              
-             # Texte statique en HTML
+             # Texte introductif des iles de ponant en HTML
              br(),
-             "Ceci est une mini-application ", strong("Shiny"),
-             " basée sur les données", em("Allociné"))
+             "Les ",strong("îles du Ponant"), "désignent un ensemble de ",
+             em("15 îles"), "et archipels français habités en permanence, situés le long de la façade ",
+             strong("ouest"), " de la France, de la Manche à l’océan Atlantique. Le mot ",
+             em("« Ponant »"), " vient de l'ancien français et signifie le ",
+             em("« couchant »")," (l'Ouest).")
 )
