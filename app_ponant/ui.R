@@ -12,10 +12,10 @@ library(shiny)
 # Define UI for application that draws a histogram
 navbarPage("Evolution des logements sur les île du Ponant",
     
-    #theme=shinytheme("journal"),
+    theme=shinytheme("flatly"),
 
     #logo ubs
-    img(src="logo_ubs.png", width="100"),
+    img(src="logo_ubs.png", width="200"),
     
     # Premier onglet
     tabPanel("Page Graphique",
@@ -35,7 +35,7 @@ navbarPage("Evolution des logements sur les île du Ponant",
                            "Choix de l'indicateur",
                            choices = c("Nb d'habitants ",
                                        "Taux de résidendes secondaires ",
-                                       "Prix médian du bâti au m2 ")),
+                                       "Prix au mètre carré")),
               
               # Bouton pour déclencher la mise à jour
               actionButton(
@@ -56,11 +56,16 @@ navbarPage("Evolution des logements sur les île du Ponant",
     
     # Deuxième onglet
   tabPanel("A propos",
+           #Titre
+           h1("C'est quoi les Ile du Ponant ?", style = "font-size: 36px; font-weight: bold; margin-bottom: 25px;"),
+           
            div(
              style = "display: flex; align-items: flex-start; gap: 20px;",
              
+             
              # Image
              img(src = "ile_ponant.jpg", width = "200"),
+             
              
              # Texte
              p(
@@ -80,6 +85,10 @@ navbarPage("Evolution des logements sur les île du Ponant",
                  "faisant de ces îles des observatoires privilégiés pour ",strong("l'aménagement du territoire.")
                
              )
-           )
+           ),
+           h3("Auteur:"),
+           br(),
+           p("NGUYEN Phuong-vy"),
+           p("BOSSER Clarence")
   )
 )

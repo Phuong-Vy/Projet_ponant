@@ -26,7 +26,9 @@ function(input, output, session) {
         y = paste(input$choix_indicateur),
         x = "Date"
       )+
-      theme_classic()
+      theme_classic()+
+      theme(
+        plot.title = element_markdown(size = 14, hjust = 0.5))
   })
   
   #Graphique de comparaison des différentes iles en fonction des indicateurs
@@ -44,7 +46,10 @@ function(input, output, session) {
         y = paste(input$choix_indicateur),
         x = "Ile"
       )+
-      theme_classic()
+      theme_classic()+
+      theme(
+        plot.title = element_markdown(size = 14, hjust = 0.5), #titre centré
+        plot.subtitle = element_markdown(size = 12, hjust = 0.5)) # Sous-titre centré
   
   })
   
