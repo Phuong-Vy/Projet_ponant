@@ -6,7 +6,7 @@ library(dplyr)
 
 function(input, output, session) {
   
-  perimetre <- reactive({
+  perimetre <- eventReactive(input$go_button,{
     df_final %>% 
       filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur) #Filtrage des paramètres choisis par l'utilisateur
   })
@@ -17,6 +17,10 @@ function(input, output, session) {
       ggplot(aes(x = Date, y = Nombre, colour = Ile)) + 
       geom_line() +
       geom_point()+ #Ajoute un point à chaque date
+      geom_text(
+        aes(label = Nombre), 
+        vjust = -1, size = 3
+      )+
       labs( # Titres, sous-titres
         title = paste("Évolution du ", input$choix_indicateur," dans le temps"),
         y = paste(input$choix_indicateur),
@@ -38,7 +42,7 @@ function(input, output, session) {
         title = paste("Évolution du ", input$choix_indicateur," de l'année la plus résente"), 
         subtitle = "Comparaison entre île",
         y = paste(input$choix_indicateur),
-        x = "Date"
+        x = "Ile"
       )+
       theme_classic()
   
