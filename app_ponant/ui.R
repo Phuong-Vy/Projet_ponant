@@ -15,7 +15,8 @@ navbarPage("Evolution des logements sur les île du Ponant",
     theme=shinytheme("flatly"),
 
     #logo ubs
-    img(src="logo_ubs.png", width="200"),
+    img(src="logo_ubs.png", width="140"),
+    img(src="logo_ponant.png", width="140"),
     
     # Premier onglet
     tabPanel("Page Graphique",
