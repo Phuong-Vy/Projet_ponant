@@ -11,6 +11,7 @@ library(ggiraph) # Dataviz interactive
 library(ggtext) # Complément ggplot2
 library(tidyverse)
 library(shinythemes)
+library(plotly)
 
 
 # IMPORTATION---------------------
@@ -43,5 +44,3 @@ df_final$Tout <- ifelse(
   "Prix au mètre carré", 
   df_final$Tout
 )  
-
-
