@@ -48,8 +48,14 @@ navbarPage("Evolution des logements sur les île du Ponant",
   
           # Show a plot of the generated distribution
           mainPanel(
-              plotOutput("plot_ponant"),
-              plotOutput("bar_ponant")
+              plotlyOutput("plot_ponant"),
+              
+              hr(),
+              
+              tabsetPanel(
+                tabPanel("Graphique en barres", plotlyOutput("bar_ponant")),
+                tabPanel("Graphique empilé", plotlyOutput("stacked_ponant"))
+              )
           )
         
     ) 
