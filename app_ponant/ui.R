@@ -11,11 +11,11 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 navbarPage("Evolution des logements sur les île du Ponant",
-    
+    img(src="logo_ubs.png", width="140"),
     theme=shinytheme("flatly"),
 
     #logo ubs
-    img(src="logo_ubs.png", width="140"),
+   
     img(src="logo_ponant.png", width="140"),
     
     # Premier onglet
@@ -97,5 +97,10 @@ navbarPage("Evolution des logements sur les île du Ponant",
            br(),
            p("NGUYEN Phuong-vy"),
            p("BOSSER Clarence")
-  )
+  ),
+  #Troisième onglet
+  tabPanel("Carte",
+             leafletOutput("mymap"),
+             p()
+           )
 )

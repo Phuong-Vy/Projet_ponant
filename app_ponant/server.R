@@ -85,4 +85,19 @@ function(input, output, session) {
     
   ggplotly(p, tooltip = "text")
   })
+  
+  points <- eventReactive(input$recalc, {
+    localisation
+  }, ignoreNULL = FALSE)
+  
+  output$mymap <- renderLeaflet({
+    leaflet(data = points()) %>%
+      addTiles() %>%
+      addMarkers(
+        lng = ~long, 
+        lat = ~lat, 
+        popup = ~Ile
+      )
+  })
+  
 }

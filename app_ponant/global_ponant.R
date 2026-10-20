@@ -12,6 +12,8 @@ library(ggtext) # Complément ggplot2
 library(tidyverse)
 library(shinythemes)
 library(plotly)
+library(leaflet) #Carte interactive
+library(tidygeocoder) #Permet de trouver la localisation d'un lieu
 
 
 # IMPORTATION---------------------
@@ -37,10 +39,29 @@ df_final<-df_nettoyer %>%
   separate(Tout, into = c("Tout", "Date"), sep = "\\(") %>%  #  Création d'une colonne Date
   mutate(Date = as.numeric(str_remove(Date, "\\)")))
 
-df_final$Nombre <- round(df_final$Nombre , 4)
+df_final$Nombre <- round(df_final$Nombre , 4) #Arrondir les données
   
 df_final$Tout <- ifelse(
-  startsWith(df_final$Tout, "Prix médian"), 
+  startsWith(df_final$Tout, "Prix médian"), #Change le nom des colonne pour correspondre au cahier des charges
   "Prix au mètre carré", 
   df_final$Tout
 )  
+
+localisation <- df_nettoyer %>%
+  mutate(
+  nom_pour_geocodage = case_when(
+    Ile == "Aix" ~ "Île d'Aix, Charente-Maritime, France",
+    Ile == "Batz" ~ "Île de Batz, Finistère, France",
+    Ile == "Sein" ~ "Île de Sein, France",
+    Ile == "Molène" ~ "Île de Molène, France",
+    Ile == "Ouessant" ~ "Île d'Ouessant, France",
+    Ile == "Groix" ~ "Île de Groix, France",
+    Ile == "Hoëdic" ~ "Île d'Hoëdic, France",
+    Ile == "Houat" ~ "Île de Houat, France",
+    Ile == "Yeu" ~ "Île d'Yeu, France",
+    Ile == "Bréhat" ~ "Île de Bréhat, France",
+    TRUE ~ paste0(Ile, ", France") # Pour les autres (ex: Belle-île, etc.)
+  ))%>%
+  rename(long = any_of(c("lng", "long"))) %>%
+  geocode(address = nom_pour_geocodage, method = 'osm', lat = lat, long = lng) %>%
+  select(Ile, lat, lng)
