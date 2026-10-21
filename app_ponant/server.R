@@ -94,7 +94,7 @@ function(input, output, session) {
     leaflet(data = points()) %>%
       addTiles() %>%
       addMarkers(
-        lng = ~long, 
+        lng = ~lng, 
         lat = ~lat, 
         popup = ~Ile
       )

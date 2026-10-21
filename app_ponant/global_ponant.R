@@ -1,13 +1,12 @@
 # PACKAGES---------------------
 
 library(tidyverse)
-# readr : Importation de données (tidyverse)
-# dplyr : Traitement de données (tidyverse)
-# readxl : Importation de fichier Excel (tidyverse)
-# forcats : Gestion de facteurs (tidyverse)
-# ggplot2: Visualisation graphique (tidyverse)
-# lubridate : Gestion des dates (tidyverse)
-
+library(readr)     # Importation de données (tidyverse)
+library(dplyr)     # Traitement de données (tidyverse)
+library(readxl)    # Importation de fichier Excel (tidyverse)
+library(forcats)   # Gestion de facteurs (tidyverse)
+library(ggplot2)   # Visualisation graphique (tidyverse)
+library(lubridate) # Gestion des dates (tidyverse)
 library(ggiraph) # Dataviz interactive
 library(ggtext) # Complément ggplot2
 library(shinythemes)
@@ -23,16 +22,19 @@ df_ponant<- read_excel("app_ponant/data/Data_Ponant.xlsx")
 
 glimpse(df_ponant)
 
-df_nettoyer <- df_ponant %>% 
-  select(-c("Nom commune")) %>%  # suppression de la colonne Nom commune
+#Pouur la la localisation
+df_nettoye_v0 <- df_ponant %>% 
+  mutate(`Nom commune` = ifelse(`Nom commune` == "Total Belle-île", "Belle-île", `Nom commune`))%>%
   filter(Ile!="Locmaria" & Ile!="Le Palais" & Ile!="Sauzon"& Ile!="Bangor") %>%  # retrait des îles qui font partie de l'archipel Belle-île en Mer
   mutate(`Prix médian du bâti au m2 (2023)` = as.numeric(`Prix médian du bâti au m2 (2023)`))  # mettre les valeurs en numeric
 
 
+df_nettoye <- df_nettoye_v0 %>% 
+  select(-c("Nom commune"))  # suppression de la colonne Nom commune
 
-glimpse(df_nettoyer)
+glimpse(df_nettoye)
 
-df_final<-df_nettoyer %>% 
+df_final<-df_nettoye %>% 
   pivot_longer(cols=! "Ile", 
                names_to="Tout",
                values_to="Nombre") %>% # Rautation de la table (colonne en variable et variable en colonne)
@@ -47,21 +49,7 @@ df_final$Tout <- ifelse(
   df_final$Tout
 )  
 
-localisation <- df_nettoyer %>%
-  mutate(
-  nom_pour_geocodage = case_when(
-    Ile == "Aix" ~ "Île d'Aix, Charente-Maritime, France",
-    Ile == "Batz" ~ "Île de Batz, Finistère, France",
-    Ile == "Sein" ~ "Île de Sein, France",
-    Ile == "Molène" ~ "Île de Molène, France",
-    Ile == "Ouessant" ~ "Île d'Ouessant, France",
-    Ile == "Groix" ~ "Île de Groix, France",
-    Ile == "Hoëdic" ~ "Île d'Hoëdic, France",
-    Ile == "Houat" ~ "Île de Houat, France",
-    Ile == "Yeu" ~ "Île d'Yeu, France",
-    Ile == "Bréhat" ~ "Île de Bréhat, France",
-    TRUE ~ paste0(Ile, ", France") # Pour les autres (ex: Belle-île, etc.)
-  ))%>%
-  rename(long = any_of(c("lng", "long"))) %>%
-  geocode(address = nom_pour_geocodage, method = 'osm', lat = lat, long = lng) %>%
+localisation <- df_nettoye_v0 %>%
+  rename(lng = any_of(c("lng", "long"))) %>%
+  geocode(address = `Nom commune`, method = 'osm', lat = lat, long = lng) %>%
   select(Ile, lat, lng)
