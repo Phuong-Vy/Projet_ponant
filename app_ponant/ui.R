@@ -80,45 +80,65 @@ navbarPage("Evolution des logements sur les île du Ponant",
   ),
     
     # Deuxième onglet
-  tabPanel("A propos",
-           #Titre
-           h1("C'est quoi les Ile du Ponant ?", style = "font-size: 36px; font-weight: bold; margin-bottom: 25px;"),
-           
-           div(
-             style = "display: flex; align-items: flex-start; gap: 20px;",
+  tabPanel("À propos",
+           fluidPage(
+             # En-tête avec le logo et le titre côte à côte
+             div(
+               style = "display: flex; align-items: center; gap: 20px; margin-bottom: 20px;",
+               img(src = "ile_ponant.jpg", width = "150"), # Vous pouvez ajuster la largeur ici
+               h3("🌊 Bienvenue sur l'espace des Îles du Ponant !", style = "margin: 0; font-weight: bold;")
+             ),
              
+             p("Vous vous êtes déjà demandé comment évoluent l'immobilier et la population sur nos îles ? Ce site est là pour y répondre !"),
+             p("Pensée autour de données open-data officielles de l'INSEE, cette application interactive vous emmène à la découverte des Îles du Ponant. L'objectif est simple : vous offrir une vision claire et visuelle de la façon dont ces territoires insulaires se développent et changent au fil du temps."),
              
-             # Image
-             img(src = "ile_ponant.jpg", width = "200"),
+             br(),
              
+             h3("🔍 Qu'est-ce qu'on peut y faire ?"),
+             tags$ul(
+               tags$li(tags$b("Explorer 3 indicateurs clés :"), " Plongez dans les chiffres de la démographie (nombre d'habitants), de l'habitat (taux de résidences secondaires) et du marché immobilier (prix au mètre carré)."),
+               tags$li(tags$b("Mener vos propres comparatifs :"), " Sélectionnez une ou plusieurs îles pour observer leurs courbes d'évolution au fil des années, ou comparez-les directement sur l'année la plus récente grâce à des graphiques dynamiques. (Petite précision : les différentes communes de Belle-Île ont été regroupées pour n'afficher qu'un seul total global)."),
+               tags$li(tags$b("Naviguer en un clin d'œil :"), " Besoin de situer géographiquement ces îles ? Un onglet cartographique interactif est également à votre disposition pour explorer la zone.")
+             ),
              
-             # Texte
-             p(
-               "Les ", strong("îles du Ponant"), " désignent un ensemble de ",
-               em("15 îles"), " et archipels français habités en permanence, situés le long de la façade ",
-               strong("ouest"), " de la France, de la Manche à l’océan Atlantique. Le mot ",
-               em("« Ponant »"), " vient de l'ancien français et signifie le ",
-               em("« couchant »"), " (l'Ouest).",
-               br(),
-               "Ces territoires insulaires se distinguent par leur identité ",em("maritime forte, "),
-               "façonnée par l'océan, et par des écosystèmes fragiles mais précieux. ",
-               "Habiter le Ponant, c'est vivre au rythme des marées, du vent et de l'insularité, ",
-               "tout en relevant le défi de la gestion durable d'un patrimoine naturel et culturel unique.",
-               br(),
-                 "La gestion du logement y est particulièrement ",strong("complexe")," équilibrant les besoins ",
-                 "des résidents à l'année, le tourisme saisonnier et la préservation de l'espace littoral, ",
-                 "faisant de ces îles des observatoires privilégiés pour ",strong("l'aménagement du territoire.")
+             br(),
+             
+             h3("C'est quoi les Îles du Ponant ?"),
+             
+             div(
+               style = "display: flex; align-items: flex-start; gap: 20px;",
                
-             )
-           ),
-           h3("Auteur:"),
-           br(),
-           p("NGUYEN Phuong-vy"),
-           p("BOSSER Clarence")
-  ),
-  #Troisième onglet
-  tabPanel("Carte",
-             leafletOutput("mymap"),
-             p()
+               p(
+                 "Les ", strong("îles du Ponant"), " désignent un ensemble de ",
+                 em("15 îles"), " et archipels français habités en permanence, situés le long de la façade ",
+                 strong("ouest"), " de la France, de la Manche à l’océan Atlantique. Le mot ",
+                 em("« Ponant »"), " vient de l'ancien français et signifie le ",
+                 em("« couchant »"), " (l'Ouest).",
+                 br(), br(),
+                 "Ces territoires insulaires se distinguent par leur identité ", em("maritime forte, "),
+                 "façonnée par l'océan, et par des écosystèmes fragiles mais précieux. ",
+                 "Habiter le Ponant, c'est vivre au rythme des marées, du vent et de l'insularité, ",
+                 "tout en relevant le défi de la gestion durable d'un patrimoine naturel et culturel unique.",
+                 br(), br(),
+                 "La gestion du logement y est particulièrement ", strong("complexe"), ", équilibrant les besoins ",
+                 "des résidents à l'année, le tourisme saisonnier et la préservation de l'espace littoral, ",
+                 "faisant de ces îles des observatoires privilégiés pour ", strong("l'aménagement du territoire.")
+               )
+             ),
+             
+             br(),
+             h3("Auteurs :"),
+             p("NGUYEN Phuong-vy"),
+             p("BOSSER Clarence"),
+             
+             br(),
+             p(em("Bonne exploration de nos îles ! ⛵"))
            )
+  ),
+  
+  # Troisième onglet
+  tabPanel("Carte",
+           leafletOutput("mymap"),
+           p()
+  )
 )
