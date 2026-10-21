@@ -1,15 +1,15 @@
 # PACKAGES---------------------
 
-library(readr) # Importation de données (tidyverse)
-library(dplyr) # Traitement de données (tidyverse)
-library(readxl) # Importation de fichier Excel (tidyverse)
-library(forcats) # Gestion de facteurs (tidyverse)
-library(ggplot2) # Visualisation graphique (tidyverse)
-library(lubridate) # Gestion des dates (tidyverse)
+library(tidyverse)
+# readr : Importation de données (tidyverse)
+# dplyr : Traitement de données (tidyverse)
+# readxl : Importation de fichier Excel (tidyverse)
+# forcats : Gestion de facteurs (tidyverse)
+# ggplot2: Visualisation graphique (tidyverse)
+# lubridate : Gestion des dates (tidyverse)
 
 library(ggiraph) # Dataviz interactive
 library(ggtext) # Complément ggplot2
-library(tidyverse)
 library(shinythemes)
 library(plotly)
 library(leaflet) #Carte interactive
