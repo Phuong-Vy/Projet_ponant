@@ -11,12 +11,30 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 navbarPage("Evolution des logements sur les île du Ponant",
-    img(src="logo_ubs.png", width="140"),
     theme=shinytheme("flatly"),
 
-    #logo ubs
    
     img(src="logo_ponant.png", width="140"),
+    
+    header = tagList(
+      tags$head(
+        tags$style(HTML("
+        /* La barre est bien le repère de positionnement */
+        .navbar {
+          position: relative;
+        }
+        /* Le logo UBS dans le coin supérieur droit */
+        .logo-ubs-coin {
+          position: absolute;
+          right: 20px;
+          top: 8px;
+          z-index: 1000;
+        }
+      "))
+      ),
+      # On insère l'image avec cette classe CSS
+      img(src = "logo_ubs1.png", width = "60", class = "logo-ubs-coin")
+    ),
     
     # Premier onglet
     tabPanel("Page Graphique",
