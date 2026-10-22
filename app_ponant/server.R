@@ -68,6 +68,7 @@ function(input, output, session) {
       ungroup()
     
       p <- df_stack %>%
+        mutate(Ile = reorder(Ile, Pourcentage)) %>%
         ggplot(aes(x = Tout, y = Nombre, fill = Ile,
                    text = paste0("Île : ", Ile, 
                                  "<br>Nombre : ", Nombre, 
