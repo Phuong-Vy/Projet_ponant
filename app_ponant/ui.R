@@ -19,12 +19,10 @@ navbarPage("Evolution des logements sur les île du Ponant",
     header = tagList(
       tags$head(
         tags$style(HTML("
-        /* La barre est bien le repère de positionnement */
         .navbar {
           position: relative;
         }
-        /* Le logo UBS dans le coin supérieur droit */
-        .logo-ubs-coin {
+        .logo-ubs-coin { #Positionnement du logo Ubs
           position: absolute;
           right: 20px;
           top: 8px;
@@ -32,14 +30,13 @@ navbarPage("Evolution des logements sur les île du Ponant",
         }
       "))
       ),
-      # On insère l'image avec cette classe CSS
-      img(src = "logo_ubs1.png", width = "60", class = "logo-ubs-coin")
+      img(src = "logo_ubs1.png", width = "60", class = "logo-ubs-coin") 
     ),
     
     # Premier onglet
     tabPanel("À propos",
            fluidPage(
-             # En-tête avec le logo et le titre côte à côte
+             # En-tête avec le logo et le titre 
              div(
                style = "display: flex; align-items: center; gap: 20px; margin-bottom: 20px;",
                img(src = "photo_port2.jpg", width = "230"), 
@@ -63,7 +60,7 @@ navbarPage("Evolution des logements sur les île du Ponant",
              
              img(
                src = "decouverte-iles-ponant.jpg", 
-               width = "270", # Tu peux ajuster la largeur selon ton rendu
+               width = "270",
                style = "float: right; margin-left: 25px; margin-bottom: 15px; border-radius: 8px;"
              ),
              
@@ -131,8 +128,10 @@ navbarPage("Evolution des logements sur les île du Ponant",
           # Show a plot of the generated distribution
           mainPanel(
             
-              uiOutput("boxes_ponant"),
+              uiOutput("boxes_ponant"), #Box évollution des indicateur
+              
               br(),
+              
               plotlyOutput("plot_ponant"),
               
               hr(),

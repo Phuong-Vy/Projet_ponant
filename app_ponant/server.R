@@ -8,10 +8,10 @@ function(input, output, session) {
   
   perimetre <- eventReactive(input$go_button, {
     validate(
-      need(length(input$choix_ile) > 0, "")
+      need(length(input$choix_ile) > 0, "") 
     )
     
-    df_final %>% 
+    df_final %>%  #Filtre les lignes en fonction du choix de l'utilisateur(pour les graphiques)
       filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur)
   })
   
@@ -20,11 +20,11 @@ function(input, output, session) {
       need(length(input$choix_ile) > 0, "")
     )
     
-    df_compa %>%
+    df_compa %>% #Filtre les lignes en fonction du choix de l'utilisateur(pour les box de comparaison)
       filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur)
   })
   
-  observeEvent(input$go_button, {
+  observeEvent(input$go_button, { #Affiche un message d'erreur quand aucune ile n'a été choisi
     if (length(input$choix_ile) == 0) {
       showModal(
         modalDialog(
@@ -43,11 +43,11 @@ function(input, output, session) {
       filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur)
   })
   
-  # Value boxes au-dessus du line-graph
+  # Value boxes
   output$boxes_ponant <- renderUI({
     req(kpi_perimetre())
     
-    # Nom propre de l'indicateur (sans espace superflu à la fin)
+    # Nom de l'indicateur
     nom_indicateur <- trimws(isolate(input$choix_indicateur))
     
     # Nombre total d'îles retenues dans le périmètre actuel
@@ -58,11 +58,10 @@ function(input, output, session) {
     kpi_df <- kpi_perimetre() %>%
       filter(!is.na(diff_pct)) %>%
       arrange(desc(abs(diff_pct))) %>%
-      slice_head(n = 3)
+      slice_head(n = 3) #Les trois ile avec une variation significative
     
     req(nrow(kpi_df) > 0)
     
-    # Titre adaptatif selon s'il y a plus de 3 îles ou non
     titre_section <- if (nb_iles_dispo > 3) {
       paste0("Top 3 des îles présentant le plus de changement ", nom_indicateur)
     } else {
@@ -72,6 +71,7 @@ function(input, output, session) {
     boxes <- lapply(seq_len(nrow(kpi_df)), function(i) {
       row <- kpi_df[i, ]
       
+      #Permet de voir si il y a une augmentation ou  diminution
       est_positif <- !is.na(row$diff_abs) && row$diff_abs > 0
       est_negatif <- !is.na(row$diff_abs) && row$diff_abs < 0
       
@@ -92,10 +92,11 @@ function(input, output, session) {
         bs_icon("dash-lg")
       }
       
+      #Ajoute le signe de la variation
       signe_abs <- ifelse(!is.na(row$diff_abs) && row$diff_abs >= 0, "+", "")
       signe_pct <- ifelse(!is.na(row$diff_pct) && row$diff_pct >= 0, "+", "")
       
-      valeur_affichee <- format(round(row$Nombre, 2), big.mark = " ", decimal.mark = ",")
+      valeur_affichee <- format(round(row$Nombre, 2), big.mark = " ", decimal.mark = ",") #Arrondit a deux décimal
       abs_formate <- if (!is.na(row$diff_abs)) {
         paste0(signe_abs, format(round(row$diff_abs, 2), big.mark = " ", decimal.mark = ","))
       } else {
@@ -109,7 +110,7 @@ function(input, output, session) {
       
       texte_delta <- paste0(pct_formate," (",format(row$Date)," vs ", format(row$date_precedente),")")
       
-      value_box(
+      value_box( #Affiche les box
         title = paste0(row$Ile),
         value = valeur_affichee,
         p(texte_delta),
@@ -117,15 +118,13 @@ function(input, output, session) {
         theme = theme_box
       )
     })
-    
-    # C'est ce tagList qui manquait au retour !
     tagList(
       h4(
         titre_section,
         style = "font-weight: bold; margin-bottom: 12px;"
       ),
       layout_column_wrap(
-        width = 1 / min(length(boxes), 3),
+        width = 1 / min(length(boxes), 3),# Dispose les boîtes côte à côte en grille
         fill = FALSE,
         !!!boxes
       )
@@ -177,7 +176,7 @@ function(input, output, session) {
   #Graphique de comparaison des différentes iles en fonction des indicateurs
   output$stacked_ponant <- renderPlotly({
     df_stack <- perimetre() %>% 
-      group_by(Ile,Tout) %>% # Remplace 'Categorie' par ta vraie colonne de sous-groupes
+      group_by(Ile,Tout) %>%
       arrange(desc(Date)) %>% 
       slice_head(n = 1) %>%
       ungroup() %>% 
@@ -208,7 +207,8 @@ function(input, output, session) {
   ggplotly(p, tooltip = "text")
   })
   
-  points <- eventReactive(input$recalc, {
+  #Creation de la map intéractive
+  points <- eventReactive(input$recalc, { 
     localisation
   }, ignoreNULL = FALSE)
   
