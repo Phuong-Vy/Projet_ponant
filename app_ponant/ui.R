@@ -130,6 +130,9 @@ navbarPage("Evolution des logements sur les île du Ponant",
   
           # Show a plot of the generated distribution
           mainPanel(
+            
+              uiOutput("boxes_ponant"),
+              br(),
               plotlyOutput("plot_ponant"),
               
               hr(),

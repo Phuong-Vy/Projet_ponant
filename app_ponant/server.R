@@ -11,6 +11,73 @@ function(input, output, session) {
       filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur) #Filtrage des paramètres choisis par l'utilisateur
   })
   
+  # Périmètre précalculé pour les value_box (1 ligne par île et indicateur)
+  kpi_perimetre <- eventReactive(input$go_button, {
+    df_compa %>%
+      filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur)
+  })
+  
+  # Value boxes au-dessus du line-graph
+  output$boxes_ponant <- renderUI({
+    kpi_df <- kpi_perimetre()
+    req(nrow(kpi_df) > 0)
+    
+    boxes <- lapply(seq_len(nrow(kpi_df)), function(i) {
+      row <- kpi_df[i, ]
+      
+      est_positif <- !is.na(row$diff_abs) && row$diff_abs > 0
+      est_negatif <- !is.na(row$diff_abs) && row$diff_abs < 0
+      
+      # Couleur de fond et icône selon hausse ou baisse
+      theme_box <- if (est_positif) {
+        "green"
+      } else if (est_negatif) {
+        "red"
+      } else {
+        "secondary"
+      }
+      
+      icone_box <- if (est_positif) {
+        bs_icon("graph-up-arrow")
+      } else if (est_negatif) {
+        bs_icon("graph-down-arrow")
+      } else {
+        bs_icon("dash-lg")
+      }
+      
+      signe_abs <- ifelse(!is.na(row$diff_abs) && row$diff_abs >= 0, "+", "")
+      signe_pct <- ifelse(!is.na(row$diff_pct) && row$diff_pct >= 0, "+", "")
+      
+      valeur_affichee <- format(round(row$Nombre, 2), big.mark = " ", decimal.mark = ",")
+      abs_formate <- if (!is.na(row$diff_abs)) {
+        paste0(signe_abs, format(round(row$diff_abs, 2), big.mark = " ", decimal.mark = ","))
+      } else {
+        "N/A"
+      }
+      pct_formate <- if (!is.na(row$diff_pct)) {
+        paste0(signe_pct, format(round(row$diff_pct, 1), decimal.mark = ","), "%")
+      } else {
+        "N/A"
+      }
+      
+      texte_delta <- paste0(pct_formate, " (", abs_formate, ") vs ", format(row$date_precedente))
+      
+      value_box(
+        title = paste0(row$Ile, " — ", input$choix_indicateur),
+        value = valeur_affichee,
+        p(texte_delta),
+        showcase = icone_box,
+        theme = theme_box
+      )
+    })
+    
+    layout_column_wrap(
+      width = 1 / min(length(boxes), 3),
+      fill = FALSE,
+      !!!boxes
+    )
+  })
+  
   #Creation des différentes courbe d'évolution en fonction de l'indicateur et de(s) ile(s) choisie
   output$plot_ponant <- renderPlotly({
     p <- perimetre() %>% 
