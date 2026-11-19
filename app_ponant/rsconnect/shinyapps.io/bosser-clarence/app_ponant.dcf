@@ -1,0 +1,12 @@
+name: app_ponant
+title: app_ponant
+username: bosser-clarence
+account: bosser-clarence
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 18484904
+bundleId: 12843353
+url: https://bosser-clarence.shinyapps.io/app_ponant/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
