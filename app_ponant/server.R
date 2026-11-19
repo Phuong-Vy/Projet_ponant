@@ -19,8 +19,29 @@ function(input, output, session) {
   
   # Value boxes au-dessus du line-graph
   output$boxes_ponant <- renderUI({
-    kpi_df <- kpi_perimetre()
+    req(kpi_perimetre())
+    
+    # Nom propre de l'indicateur (sans espace superflu à la fin)
+    nom_indicateur <- trimws(isolate(input$choix_indicateur))
+    
+    # Nombre total d'îles retenues dans le périmètre actuel
+    nb_iles_dispo <- kpi_perimetre() %>%
+      filter(!is.na(diff_pct)) %>%
+      nrow()
+    
+    kpi_df <- kpi_perimetre() %>%
+      filter(!is.na(diff_pct)) %>%
+      arrange(desc(abs(diff_pct))) %>%
+      slice_head(n = 3)
+    
     req(nrow(kpi_df) > 0)
+    
+    # Titre adaptatif selon s'il y a plus de 3 îles ou non
+    titre_section <- if (nb_iles_dispo > 3) {
+      paste0("Top 3 des îles présentant le plus de changement — ", nom_indicateur)
+    } else {
+      paste0("Îles présentant le plus de changement — ", nom_indicateur)
+    }
     
     boxes <- lapply(seq_len(nrow(kpi_df)), function(i) {
       row <- kpi_df[i, ]
@@ -30,11 +51,11 @@ function(input, output, session) {
       
       # Couleur de fond et icône selon hausse ou baisse
       theme_box <- if (est_positif) {
-        "green"
+        value_box_theme(bg = "#198754", fg = "#ffffff") # Vert
       } else if (est_negatif) {
-        "red"
+        value_box_theme(bg = "#dc3545", fg = "#ffffff") # Rouge
       } else {
-        "secondary"
+        value_box_theme(bg = "#6c757d", fg = "#ffffff") # Gris neutre
       }
       
       icone_box <- if (est_positif) {
@@ -60,10 +81,10 @@ function(input, output, session) {
         "N/A"
       }
       
-      texte_delta <- paste0(pct_formate, " (", abs_formate, ") vs ", format(row$date_precedente))
+      texte_delta <- paste0(pct_formate, " vs ", format(row$date_precedente))
       
       value_box(
-        title = paste0(row$Ile, " — ", input$choix_indicateur),
+        title = paste0(row$Ile),
         value = valeur_affichee,
         p(texte_delta),
         showcase = icone_box,
@@ -71,10 +92,17 @@ function(input, output, session) {
       )
     })
     
-    layout_column_wrap(
-      width = 1 / min(length(boxes), 3),
-      fill = FALSE,
-      !!!boxes
+    # C'est ce tagList qui manquait au retour !
+    tagList(
+      h4(
+        titre_section,
+        style = "font-weight: bold; margin-bottom: 12px;"
+      ),
+      layout_column_wrap(
+        width = 1 / min(length(boxes), 3),
+        fill = FALSE,
+        !!!boxes
+      )
     )
   })
   
