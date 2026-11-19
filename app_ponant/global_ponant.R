@@ -13,7 +13,8 @@ library(shinythemes)
 library(plotly)
 library(leaflet) #Carte interactive
 library(tidygeocoder) #Permet de trouver la localisation d'un lieu
-
+library(bslib)
+library(bsicons)
 
 # IMPORTATION---------------------
 
@@ -48,6 +49,21 @@ df_final$Tout <- ifelse(
   "Prix au mètre carré", 
   df_final$Tout
 )  
+
+
+df_compa <- df_final %>%
+  group_by(Ile, Tout) %>%
+  arrange(desc(Date), .by_group = TRUE) %>%
+  mutate(
+    val_precedente = lead(Nombre, n = 1), # valeur de la date juste avant
+    date_precedente = lead(Date, n = 1),
+    diff_abs = Nombre - val_precedente,
+    diff_pct = ifelse(!is.na(val_precedente) & val_precedente != 0,
+                      ((Nombre - val_precedente) / abs(val_precedente)) * 100,
+                      NA_real_)
+  ) %>%
+  slice_head(n = 1) %>% # garde uniquement la date la plus récente par île et indicateur
+  ungroup()
 
 localisation <- df_nettoye_v0 %>%
   rename(lng = any_of(c("lng", "long"))) %>%
