@@ -107,7 +107,7 @@ function(input, output, session) {
         "N/A"
       }
       
-      texte_delta <- paste0(pct_formate, " vs ", format(row$date_precedente))
+      texte_delta <- paste0(pct_formate," (",format(row$Date)," vs ", format(row$date_precedente),")")
       
       value_box(
         title = paste0(row$Ile),
