@@ -19,7 +19,7 @@ library(bsicons)
 # IMPORTATION---------------------
 
 ## Importation fichier csv----------------
-df_ponant<- read_excel("app_ponant/data/Data_Ponant.xlsx")
+df_ponant<- read_excel("data/Data_Ponant.xlsx")
 
 glimpse(df_ponant)
 

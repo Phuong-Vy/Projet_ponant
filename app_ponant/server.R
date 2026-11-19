@@ -6,9 +6,35 @@ library(dplyr)
 
 function(input, output, session) {
   
-  perimetre <- eventReactive(input$go_button,{
+  perimetre <- eventReactive(input$go_button, {
+    validate(
+      need(length(input$choix_ile) > 0, "")
+    )
+    
     df_final %>% 
-      filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur) #Filtrage des paramètres choisis par l'utilisateur
+      filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur)
+  })
+  
+  kpi_perimetre <- eventReactive(input$go_button, {
+    validate(
+      need(length(input$choix_ile) > 0, "")
+    )
+    
+    df_compa %>%
+      filter(Ile %in% input$choix_ile & Tout == input$choix_indicateur)
+  })
+  
+  observeEvent(input$go_button, {
+    if (length(input$choix_ile) == 0) {
+      showModal(
+        modalDialog(
+          title = "Aucune île sélectionnée",
+          "Veuillez choisir au moins une île dans la liste déroulante puis cliquer sur Appliquer.",
+          easyClose = TRUE,
+          footer = modalButton("OK")
+        )
+      )
+    }
   })
   
   # Périmètre précalculé pour les value_box (1 ligne par île et indicateur)
@@ -38,9 +64,9 @@ function(input, output, session) {
     
     # Titre adaptatif selon s'il y a plus de 3 îles ou non
     titre_section <- if (nb_iles_dispo > 3) {
-      paste0("Top 3 des îles présentant le plus de changement — ", nom_indicateur)
+      paste0("Top 3 des îles présentant le plus de changement ", nom_indicateur)
     } else {
-      paste0("Îles présentant le plus de changement — ", nom_indicateur)
+      paste0("Evolution du ", nom_indicateur)
     }
     
     boxes <- lapply(seq_len(nrow(kpi_df)), function(i) {
